@@ -32,6 +32,17 @@ class User(db.Model):
 	
 	def __repr__(self):
 		return '<User %s>' % (self.nickname)
+	
+	def make_unique_nickname(nickname):
+		if User.query.filter_by(nickname=nickname).first() is None:
+			return nickname
+		version = 2
+		while True:
+			new_nickname = nickname + str(version)
+			if User.query.filter_by(nickname=new_nickname).first() is None:
+				return new_nickname
+			version += 1
+
 
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
